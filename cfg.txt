@@ -1,5 +1,5 @@
 # List of Non-terminal Nodes
-# Pronoun: PR-1-Sg, PR-1-Pl, PR-2-Sg, PR-2-Pl, PR-3-Sg, PR-3-Pl
+# Pronoun: PR-1-Sg-Sub, PR-1-Pl-Sub, PR-2-Sg-Sub, PR-2-Pl-Sub, PR-3-Sg-Sub, PR-3-Pl-Sub, PR-1-Sg-Obj, PR-1-Pl-Obj, PR-2-Sg-Obj, PR-2-Pl-Obj, PR-3-Sg-Obj, PR-3-Pl-Obj
 # Noun: N-Sg-Mas, N-Pl-Mas, N-Sg-Fem, N-Pl-Fem
 # Proper Noun: PN-Sg-Mas-Det, PN-Sg-Fem-Det, PN-Pl-Mas-Det, PN-Pl-Fem-Det, PN-Sg-Mas-SansDet, PN-Sg-Fem-SansDet, PN-Pl-Mas-SansDet, PN-Pl-Fem-SansDet
 # Determiner: Det-Sg-Mas, Det-Pl, Det-Sg-Fem
@@ -11,12 +11,12 @@
 # ---------------------------------------------------------------------
 # ------------------------ SENTENCE STRUCTURES ------------------------
 # ---------------------------------------------------------------------
-S -> PR-1-Sg VP-1-Sg
-S -> PR-1-Pl VP-1-Pl
-S -> PR-2-Sg VP-2-Sg
-S -> PR-2-Pl VP-2-Pl
-S -> PR-3-Sg VP-3-Sg
-S -> PR-3-Pl VP-3-Pl
+S -> PR-1-Sg-Sub VP-1-Sg
+S -> PR-1-Pl-Sub VP-1-Pl
+S -> PR-2-Sg-Sub VP-2-Sg
+S -> PR-2-Pl-Sub VP-2-Pl
+S -> PR-3-Sg-Sub VP-3-Sg
+S -> PR-3-Pl-Sub VP-3-Pl
 
 S -> NP-Sg VP-3-Sg
 S -> NP-Pl VP-3-Pl
@@ -26,35 +26,35 @@ S -> NP
 # ---------------------------------------------------------------------
 # --------------------------- VERB PHRASES ----------------------------
 # ---------------------------------------------------------------------
-VP-1-Sg -> PR V-1-Sg
-VP-1-Sg -> PR 'ne' V-1-Sg 'pas'
+VP-1-Sg -> PR-Obj V-1-Sg
+VP-1-Sg -> PR-Obj 'ne' V-1-Sg 'pas'
 VP-1-Sg -> V-1-Sg NP
 VP-1-Sg -> V-1-Sg NP
 VP-1-Sg -> 'ne' V-1-Sg 'pas' NP
 
-VP-1-Pl -> PR V-1-Pl
-VP-1-Pl -> PR 'ne' V-1-Pl 'pas'
+VP-1-Pl -> PR-Obj V-1-Pl
+VP-1-Pl -> PR-Obj 'ne' V-1-Pl 'pas'
 VP-1-Pl -> V-1-Pl NP
 VP-1-Pl -> V-1-Pl NP
 VP-1-Pl -> 'ne' V-1-Pl 'pas' NP
 
-VP-2-Sg -> PR V-2-Sg
-VP-2-Sg -> PR 'ne' V-2-Sg 'pas'
+VP-2-Sg -> PR-Obj V-2-Sg
+VP-2-Sg -> PR-Obj 'ne' V-2-Sg 'pas'
 VP-2-Sg -> V-2-Sg NP
 VP-2-Sg -> 'ne' V-2-Sg 'pas' NP
 
-VP-2-Pl -> PR V-2-Pl
-VP-2-Pl -> PR 'ne' V-2-Pl 'pas'
+VP-2-Pl -> PR-Obj V-2-Pl
+VP-2-Pl -> PR-Obj 'ne' V-2-Pl 'pas'
 VP-2-Pl -> V-2-Pl NP
 VP-2-Pl -> 'ne' V-2-Pl 'pas' NP
 
-VP-3-Sg -> PR V-3-Sg
-VP-3-Sg -> PR 'ne' V-3-Sg 'pas'
+VP-3-Sg -> PR-Obj V-3-Sg
+VP-3-Sg -> PR-Obj 'ne' V-3-Sg 'pas'
 VP-3-Sg -> V-3-Sg NP
 VP-3-Sg -> 'ne' V-3-Sg 'pas' NP
 
-VP-3-Pl -> PR V-3-Pl
-VP-3-Pl -> PR 'ne' V-3-Pl 'pas'
+VP-3-Pl -> PR-Obj V-3-Pl
+VP-3-Pl -> PR-Obj 'ne' V-3-Pl 'pas'
 VP-3-Pl -> V-3-Pl NP
 VP-3-Pl -> 'ne' V-3-Pl 'pas' NP
 
@@ -138,21 +138,28 @@ NP-Pl -> A-Pl-Fem-PP PN-Pl-Fem-SansDet
 # ---------------------------------------------------------------------
 # ------------------------------ PRONOUN ------------------------------
 # ---------------------------------------------------------------------
-PR -> PR-1-Sg | PR-1-Pl | PR-2-Sg | PR-2-Pl | PR-3-Sg | PR-3-Pl
-PR-1-Sg -> 'je'
-PR-1-Pl -> 'nous'
-PR-2-Sg -> 'tu'
-PR-2-Pl -> 'vous'
-PR-3-Sg -> 'il' | 'elle'
-PR-3-Pl -> 'ils'
+PR-Obj -> PR-1-Sg-Obj | PR-1-Pl-Obj | PR-2-Sg-Obj | PR-2-Pl-Obj | PR-3-Sg-Obj | PR-3-Pl-Obj
+PR-1-Sg-Sub -> 'je'
+PR-1-Pl-Sub -> 'nous'
+PR-2-Sg-Sub -> 'tu'
+PR-2-Pl-Sub -> 'vous'
+PR-3-Sg-Sub -> 'il' | 'elle'
+PR-3-Pl-Sub -> 'ils'
+PR-1-Sg-Obj -> 'me'
+PR-1-Pl-Obj -> 'nous'
+PR-2-Sg-Obj -> 'te'
+PR-2-Pl-Obj -> 'vous'
+PR-3-Sg-Obj -> 'le' | 'la'
+PR-3-Pl-Obj -> 'les'
+
 
 # ---------------------------------------------------------------------
 # ------------------------------- NOUN --------------------------------
 # ---------------------------------------------------------------------
-N-Sg-Mas -> 'chat' | 'poisson'
-N-Pl-Mas -> 'télévision' | 'poissons'
-N-Sg-Fem -> 'chats' | 'semaine'
-N-Pl-Fem -> 'télévisions' | 'semaines'
+N-Sg-Mas -> 'chats' | 'semaine'
+N-Pl-Mas -> 'télévisions' | 'semaines'
+N-Sg-Fem -> 'chat' | 'poisson'
+N-Pl-Fem -> 'télévision' | 'poissons'
 
 # ---------------------------------------------------------------------
 # ---------------------------- DETERMINERS ----------------------------
@@ -187,7 +194,7 @@ A-Pl-Fem-Pre ->
 A-Sg-Mas-PP ->
 A-Sg-Fem-PP -> 'dernière'
 A-Pl-Mas-PP ->
-A-Pl-Fem-PP
+A-Pl-Fem-PP ->
 
 # ---------------------------------------------------------------------
 # ------------------------------- VERBS -------------------------------
