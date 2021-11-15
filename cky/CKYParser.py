@@ -1,4 +1,6 @@
-import random, re
+import random
+import re
+from itertools import product
 from nltk import CFG
 from nltk.grammar import Production, Nonterminal
 from nltk.tree import Tree
@@ -74,7 +76,70 @@ class CKYParser:
         return Tree(tree.label(), purified_children)
 
     def __translate_unary(self, tree: Tree) -> List[Tree]:
-        pass
+        if type(tree) != Tree:
+            return [tree]
+
+        temp_unary_tree = self.__build_chain_trees(tree.label(), list(map(lambda t: t.label(), list(tree))))
+        possible_child_trees = [self.__translate_unary(child) for child in tree]
+        cartesian_child_trees = list(product(*possible_child_trees))
+
+        result: List[Tree] = list()
+
+        for unary_temp in temp_unary_tree:
+            for child in cartesian_child_trees:
+                top_node, bottom_node = unary_temp[0], unary_temp[1]
+                for c in child:
+                    bottom_node.append(c)
+                result.append(top_node)
+
+        return result
+
+    @staticmethod
+    def __build_tree_from_unary_chain(chain: List[Production]) -> Tuple[Tree, Tree]:
+        """
+        Build intermediate trees based on unary chains.
+        :param chain:
+        :return:
+        """
+        head_rule = chain.pop()
+        head_node: Tree = Tree(head_rule.lhs())
+        node = head_node
+        while len(chain) != 0:
+            cur = chain.pop()
+            new_node = Tree(cur.lhs())
+            node.append(new_node)
+            node = new_node
+        return head_node, node
+
+    def __find_chains(self, lhs: Nonterminal, rhs: List[Nonterminal, str]) -> List[List[Production]]:
+        """
+        Find possible unary chains based
+        on starting and end points.
+        :param lhs:
+        :param rhs:
+        :return:
+        """
+
+        def stringify_list_of_nodes(node: Union[Nonterminal, str]) -> str:
+            return f"'{node}'" if type(node) == str else str(node)
+
+        identifier = f"{str(lhs)} -> {','.join(map(stringify_list_of_nodes, rhs))}"
+
+        return self.__unary_chain_table.get(identifier)
+
+    def __build_chain_trees(self, lhs: Nonterminal, rhs: List[Nonterminal, str]) -> List[Tuple[Tree, Tree]]:
+        """
+        Build temp unary trees from starting and end points.
+        :param lhs:
+        :param rhs:
+        :return:
+        """
+        chains: List[List[Production]] = self.__find_chains(lhs, rhs)
+        if chains:
+            return list(map(lambda chain: CKYParser.__build_tree_from_unary_chain(chain), chains))
+        else:
+            t = Tree(lhs)
+            return [(t, t)]
 
     def __parse_tree(self, node: CKYTableEntry) -> Tree:
         """
@@ -86,32 +151,6 @@ class CKYParser:
             return Tree(node.cnf.lhs(), node.cnf.rhs())
         left_sub_tree, right_sub_tree = self.__parse_tree(node.left_child), self.__parse_tree(node.right_child)
         return Tree(node.cnf.lhs(), [left_sub_tree, right_sub_tree])
-
-    def __find_cnf_by_rhs(
-            self,
-            rhs1: Union[Nonterminal, str],
-            rhs2: Union[Nonterminal, str],
-            is_terminal: bool
-    ) -> List[Production]:
-        """
-        Find all corresponding CNF rules with
-        the specified rhs.
-        :param rhs1:
-        :param rhs2:
-        :param is_terminal:
-        :return:
-        """
-
-        result = list()
-
-        for rule in self.__cnf_grammar.productions():
-            assert isinstance(rule, Production)
-            if is_terminal and rule.rhs()[0] == rhs1:
-                result.append(rule)
-            elif not is_terminal and rule.rhs()[0] == rhs1 and rule.rhs()[1] == rhs2:
-                result.append(rule)
-
-        return result
 
     def __cky(self, sentence: str) -> List[List[List[CKYTableEntry]]]:
         """
@@ -150,6 +189,32 @@ class CKYParser:
                     possible_candidate += find_cnf(dp[left_bound][split_point], dp[split_point + 1][right_bound])
 
         return dp
+
+    def __find_cnf_by_rhs(
+            self,
+            rhs1: Union[Nonterminal, str],
+            rhs2: Union[Nonterminal, str],
+            is_terminal: bool
+    ) -> List[Production]:
+        """
+        Find all corresponding CNF rules with
+        the specified rhs.
+        :param rhs1:
+        :param rhs2:
+        :param is_terminal:
+        :return:
+        """
+
+        result = list()
+
+        for rule in self.__cnf_grammar.productions():
+            assert isinstance(rule, Production)
+            if is_terminal and rule.rhs()[0] == rhs1:
+                result.append(rule)
+            elif not is_terminal and rule.rhs()[0] == rhs1 and rule.rhs()[1] == rhs2:
+                result.append(rule)
+
+        return result
 
     def __initialize_cnf(self) -> None:
         cnf_rules: List[Production] = list()
