@@ -66,7 +66,7 @@ class CKYParser:
         :return:
         """
         # Base case, if terminal.
-        if type(tree) != tree:
+        if type(tree) != Tree:
             return tree
 
         purified_children: List[Union[Tree, str]] = list()
