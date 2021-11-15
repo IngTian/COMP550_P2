@@ -83,7 +83,10 @@ class CKYParser:
         if type(tree) != Tree:
             return [tree]
 
-        temp_unary_tree = self.__build_chain_trees(tree.label(), list(map(lambda t: t.label(), list(tree))))
+        temp_unary_tree = self.__build_chain_trees(
+            tree.label(),
+            list(map(lambda t: t.label() if type(t) == Tree else str(t), list(tree)))
+        )
         possible_child_trees = [self.__translate_unary(child) for child in tree]
         cartesian_child_trees = list(product(*possible_child_trees))
 
@@ -105,12 +108,13 @@ class CKYParser:
         :param chain:
         :return:
         """
+        chain = chain.copy()
         head_rule = chain.pop()
-        head_node: Tree = Tree(head_rule.lhs())
+        head_node: Tree = Tree(head_rule.lhs(), [])
         node = head_node
         while len(chain) != 0:
             cur = chain.pop()
-            new_node = Tree(cur.lhs())
+            new_node = Tree(cur.lhs(), [])
             node.append(new_node)
             node = new_node
         return head_node, node
@@ -139,10 +143,11 @@ class CKYParser:
         :return:
         """
         chains: List[List[Production]] = self.__find_chains(lhs, rhs)
+
         if chains:
             return list(map(lambda chain: CKYParser.__build_tree_from_unary_chain(chain), chains))
         else:
-            t = Tree(lhs)
+            t = Tree(lhs, [])
             return [(t, t)]
 
     def __parse_tree(self, node: CKYTableEntry) -> Tree:
