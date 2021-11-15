@@ -261,14 +261,25 @@ class CKYParser:
         # If the rhs is binary_plus, do the following.
         else:
             rhs_length = len(rhs)
+
+            # Build the first half first.
             rhs_first_half = rhs[:rhs_length - 1]
-            rhs_first_half_symbol = Nonterminal(CKYParser.__get_cnf_non_terminal_id(rhs_first_half))
-            first_half_temp_cnf = Production(rhs_first_half_symbol, rhs_first_half)
-            first_half_rules = CKYParser.__build_binary_plus_cnf(first_half_temp_cnf)
+            rhs_first_half_symbol = None
+            first_half_rules = None
+            if len(rhs_first_half) > 1 or type(rhs_first_half[0]) == str:
+                rhs_first_half_symbol = Nonterminal(CKYParser.__get_cnf_non_terminal_id(rhs_first_half))
+                first_half_temp_cnf = Production(rhs_first_half_symbol, rhs_first_half)
+                first_half_rules = CKYParser.__build_binary_plus_cnf(first_half_temp_cnf)
+            elif type(rhs_first_half[0]) == Nonterminal:
+                # Already a non-terminal
+                rhs_first_half_symbol = rhs_first_half[0]
+                first_half_rules = []
+
+            # Then we build the second half.
             if type(rhs[-1]) == Nonterminal:
                 results = [Production(lhs, [rhs_first_half_symbol, rhs[-1]])] + first_half_rules
             else:
-                second_half_rule = Production(Nonterminal(CKYParser.__get_cnf_non_terminal_id([rhs[-1]])), rhs[-1])
+                second_half_rule = Production(Nonterminal(CKYParser.__get_cnf_non_terminal_id([rhs[-1]])), [rhs[-1]])
                 return [Production(lhs, [rhs_first_half_symbol, second_half_rule.lhs()])] + first_half_rules + [
                     second_half_rule]
 
