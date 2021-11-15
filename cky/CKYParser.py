@@ -14,6 +14,20 @@ class RuleType(Enum):
     BINARY_PLUS = 4
 
 
+class CKYTableEntry:
+    cnf: Production
+    left_child: "CKYTableEntry"
+    right_child: "CKYTableEntry"
+
+    def __init__(self, cnf: Production, left: Union["CKYTableEntry", None], right: Union["CKYTableEntry", None]):
+        self.cnf = cnf
+        self.left_child = left
+        self.right_child = right
+
+    def is_terminal(self):
+        return self.left_child is None and self.right_child is None
+
+
 class CKYParser:
 
     def __init__(self, grammar: CFG):
@@ -24,11 +38,61 @@ class CKYParser:
         # The key follows the format: <Non-terminal> -> <EndPoint1>,<EndPoint2>,<EndPoint3>.
         # e,g. A -> B,C / A -> 'ne',B,C
         self.__unary_chain_table: Dict[str, List[List[Production]]] = dict()
-        self.__cnf_grammar = None
+        self.__cnf_grammar: CFG
         self.__initialize_cnf()
 
     def parse(self, sentence: str) -> List[Tree]:
         pass
+
+    def __find_cnf_by_rhs(
+            self,
+            rhs1: Union[Nonterminal, str],
+            rhs2: Union[Nonterminal, str],
+            is_terminal: bool
+    ) -> List[Production]:
+
+        result = list()
+
+        for rule in self.__cnf_grammar.productions():
+            assert isinstance(rule, Production)
+            if is_terminal and rule.rhs()[0] == rhs1:
+                result.append(rule)
+            elif not is_terminal and rule.rhs()[0] == rhs1 and rule.rhs()[1] == rhs2:
+                result.append(rule)
+
+        return result
+
+    def __cky(self, sentence: str) -> List[List[List[CKYTableEntry]]]:
+        if sentence[-1] == '.':
+            sentence = sentence[:, -1]
+        sentence = sentence.split(" ")
+        sentence_length = len(sentence)
+        dp = [[list() for j in range(sentence_length)] for i in range(sentence_length)]
+
+        # Fill the table diagonally.
+        for idx in range(sentence_length):
+            list_of_terminals = self.__find_cnf_by_rhs(sentence[idx], "", True)
+            list_of_terminals = list(map(lambda terminal: CKYTableEntry(terminal, None, None), list_of_terminals))
+            dp[idx][idx] = list_of_terminals
+
+        def find_cnf(first_rhs: List[CKYTableEntry], second_rhs: List[CKYTableEntry]) -> List[CKYTableEntry]:
+            result = list()
+            for rhs1 in first_rhs:
+                for rhs2 in second_rhs:
+                    rhs1_node, rhs2_node = rhs1.cnf.lhs(), rhs2.cnf.lhs()
+                    result += list(map(lambda rule: CKYTableEntry(rule, rhs1, rhs2),
+                                       self.__find_cnf_by_rhs(rhs1_node, rhs2_node, False)))
+            return result
+
+        # Fill the rest DP table.
+        for right_bound in range(1, sentence_length):
+            for left_bound in range(right_bound - 1):
+                # The DP entry to fill is dp[left_bound][right_bound]
+                possible_candidate = list()
+                for split_point in range(left_bound, right_bound - 1):
+                    possible_candidate += find_cnf(dp[left_bound][split_point], dp[split_point + 1][right_bound])
+
+        return dp
 
     def __initialize_cnf(self) -> None:
         cnf_rules: List[Production] = list()
