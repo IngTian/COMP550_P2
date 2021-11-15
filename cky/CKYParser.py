@@ -186,11 +186,12 @@ class CKYParser:
 
         # Fill the rest DP table.
         for right_bound in range(1, sentence_length):
-            for left_bound in range(right_bound - 1):
+            for left_bound in reversed(range(right_bound)):
                 # The DP entry to fill is dp[left_bound][right_bound]
                 possible_candidate = list()
-                for split_point in range(left_bound, right_bound - 1):
+                for split_point in range(left_bound, right_bound):
                     possible_candidate += find_cnf(dp[left_bound][split_point], dp[split_point + 1][right_bound])
+                dp[left_bound][right_bound] = possible_candidate
 
         return dp
 
