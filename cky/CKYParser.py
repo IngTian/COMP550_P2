@@ -1,5 +1,4 @@
-import random
-
+import random, re
 from nltk import CFG
 from nltk.grammar import Production, Nonterminal
 from nltk.tree import Tree
@@ -42,7 +41,51 @@ class CKYParser:
         self.__initialize_cnf()
 
     def parse(self, sentence: str) -> List[Tree]:
+        dp_table: List[List[List[CKYTableEntry]]] = self.__cky(sentence)
+        start_symbol = self.__original_grammar.start()
+        start_nodes = list(filter(lambda entry: entry.cnf.lhs() == start_symbol, dp_table[0][-1]))
+        possible_trees: List[Tree] = list(map(lambda node: self.__parse_tree(node), start_nodes))
+        converted_trees: List[Tree] = list()
+        for possible_tree in possible_trees:
+            converted_trees += self.__translate_to_cgf(possible_tree)
+        return converted_trees
+
+    def __translate_to_cgf(self, tree: Tree) -> List[Tree]:
+        return self.__translate_unary(self.__translate_binary_plus(tree))
+
+    def __translate_binary_plus(self, tree: Tree) -> Tree:
+        """
+        Eliminate all added nodes due to binary plus.
+        :param tree:
+        :return:
+        """
+        # Base case, if terminal.
+        if type(tree) != tree:
+            return tree
+
+        purified_children: List[Union[Tree, str]] = list()
+        for child in tree:
+            child = self.__translate_binary_plus(child)
+            if type(child) == Tree and CKYParser.__is_cnf_specific_rule(str(child.label())):
+                purified_children += list(child)
+            else:
+                purified_children.append(child)
+
+        return Tree(tree.label(), purified_children)
+
+    def __translate_unary(self, tree: Tree) -> List[Tree]:
         pass
+
+    def __parse_tree(self, node: CKYTableEntry) -> Tree:
+        """
+        Backtrack and produce a tree.
+        :param node: A CKYTable entry.
+        :return: A Tree
+        """
+        if node.is_terminal():
+            return Tree(node.cnf.lhs(), node.cnf.rhs())
+        left_sub_tree, right_sub_tree = self.__parse_tree(node.left_child), self.__parse_tree(node.right_child)
+        return Tree(node.cnf.lhs(), [left_sub_tree, right_sub_tree])
 
     def __find_cnf_by_rhs(
             self,
@@ -50,6 +93,14 @@ class CKYParser:
             rhs2: Union[Nonterminal, str],
             is_terminal: bool
     ) -> List[Production]:
+        """
+        Find all corresponding CNF rules with
+        the specified rhs.
+        :param rhs1:
+        :param rhs2:
+        :param is_terminal:
+        :return:
+        """
 
         result = list()
 
@@ -63,6 +114,12 @@ class CKYParser:
         return result
 
     def __cky(self, sentence: str) -> List[List[List[CKYTableEntry]]]:
+        """
+        Classic CKY algorithm to compute all possible
+        parse trees.
+        :param sentence: A Sentence.
+        :return: The result DP table.
+        """
         if sentence[-1] == '.':
             sentence = sentence[:, -1]
         sentence = sentence.split(" ")
@@ -151,6 +208,10 @@ class CKYParser:
                     second_half_rule]
 
         return results
+
+    @staticmethod
+    def __is_cnf_specific_rule(label: str) -> bool:
+        return re.match(r'^(CNF-Symbol).+', label) is not None
 
     @staticmethod
     def __get_cnf_non_terminal_id(rhs: List[Union[Nonterminal, str]]) -> str:
