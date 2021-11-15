@@ -111,7 +111,7 @@ class CKYParser:
             node = new_node
         return head_node, node
 
-    def __find_chains(self, lhs: Nonterminal, rhs: List[Nonterminal, str]) -> List[List[Production]]:
+    def __find_chains(self, lhs: Nonterminal, rhs: List[Union[Nonterminal, str]]) -> List[List[Production]]:
         """
         Find possible unary chains based
         on starting and end points.
@@ -127,7 +127,7 @@ class CKYParser:
 
         return self.__unary_chain_table.get(identifier)
 
-    def __build_chain_trees(self, lhs: Nonterminal, rhs: List[Nonterminal, str]) -> List[Tuple[Tree, Tree]]:
+    def __build_chain_trees(self, lhs: Nonterminal, rhs: List[Union[Nonterminal, str]]) -> List[Tuple[Tree, Tree]]:
         """
         Build temp unary trees from starting and end points.
         :param lhs:
