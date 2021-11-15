@@ -42,6 +42,10 @@ class CKYParser:
         self.__cnf_grammar: CFG
         self.__initialize_cnf()
 
+    @property
+    def cnf_grammar(self):
+        return self.__cnf_grammar
+
     def parse(self, sentence: str) -> List[Tree]:
         dp_table: List[List[List[CKYTableEntry]]] = self.__cky(sentence)
         start_symbol = self.__original_grammar.start()
@@ -229,19 +233,22 @@ class CKYParser:
             return f"'{node}'" if type(node) == str else str(node)
 
         for starting_point in node_reachable_table.keys():
-            for paths in node_reachable_table.get(starting_point):
-                new_unary_rules: Set[Production] = set()
-                for path in paths:
-                    # Non-unary
-                    if len(path) <= 1:
-                        continue
-                    # Unary
-                    path_identifier = f"{str(path[0].lhs())} -> {','.join(map(stringify_list_of_nodes, path[-1].rhs()))}"
-                    if path_identifier in self.__unary_chain_table.keys():
-                        self.__unary_chain_table.get(path_identifier).append(path)
-                    else:
-                        self.__unary_chain_table[path_identifier] = [path]
-                    new_unary_rules = new_unary_rules.union([Production(path[0].lhs(), path[-1].rhs())])
+            new_unary_rules: Set[Production] = set()
+            for path in node_reachable_table.get(starting_point):
+                # Non-unary
+                if len(path) <= 1:
+                    continue
+                # Unary
+                path_identifier = f"{str(path[0].lhs())} -> {','.join(map(stringify_list_of_nodes, path[-1].rhs()))}"
+                if path_identifier in self.__unary_chain_table.keys():
+                    self.__unary_chain_table.get(path_identifier).append(path)
+                else:
+                    self.__unary_chain_table[path_identifier] = [path]
+                new_unary_rules = new_unary_rules.union([Production(path[0].lhs(), path[-1].rhs())])
+            cnf_rules += list(new_unary_rules)
+
+        # Remove all unary rules.
+        cnf_rules = list(filter(lambda rule: not CKYParser.__is_unary(rule), cnf_rules))
 
         self.__cnf_grammar = CFG(self.__original_grammar.start(), cnf_rules)
 
