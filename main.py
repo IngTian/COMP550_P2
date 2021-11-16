@@ -65,7 +65,7 @@ def parse_sentences(parser: CKYParser, sentences: List[str]):
 
 
 if __name__ == '__main__':
-    with open('zzj-french-grammar.txt') as f:
+    with open('cfg.txt') as f:
         lines = f.readlines()
     grammar = CFG.fromstring(lines)
     parser = CKYParser(grammar)
