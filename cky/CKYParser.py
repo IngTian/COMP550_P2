@@ -57,7 +57,9 @@ class CKYParser:
         return converted_trees
 
     def __translate_to_cgf(self, tree: Tree) -> List[Tree]:
-        return self.__translate_unary(self.__translate_binary_plus(tree))
+        binary_plus_purified_tree = self.__translate_binary_plus(tree)
+        result = self.__translate_unary(binary_plus_purified_tree)
+        return result
 
     def __translate_binary_plus(self, tree: Tree) -> Tree:
         """
@@ -94,12 +96,25 @@ class CKYParser:
 
         for unary_temp in temp_unary_tree:
             for child in cartesian_child_trees:
-                top_node, bottom_node = unary_temp[0], unary_temp[1]
+                top_node, bottom_node = CKYParser.__clone_unary_tree(unary_temp[0])
                 for c in child:
                     bottom_node.append(c)
                 result.append(top_node)
 
         return result
+
+    @staticmethod
+    def __clone_unary_tree(head: Tree) -> Tuple[Tree, Tree]:
+        copied_tree = head.copy()
+        pointer = copied_tree
+        while True:
+            children = list(pointer)
+            if len(children) == 0:
+                assert isinstance(copied_tree, Tree)
+                assert isinstance(pointer, Tree)
+                return copied_tree, pointer
+            else:
+                pointer = children[0]
 
     @staticmethod
     def __build_tree_from_unary_chain(chain: List[Production]) -> Tuple[Tree, Tree]:
