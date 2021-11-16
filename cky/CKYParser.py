@@ -488,15 +488,44 @@ if __name__ == '__main__':
     parser = CKYParser(CFG.fromstring(open("../cfg.txt", 'r').read()))
 
     test_cases = [
-        # Cases to accept.
+        # Basic sentence order.
+        TestCase('je regarde la television', True),
+        TestCase('je la television regarde', False),
+
+        # Subject-verb agreement.
         TestCase('je regarde la television', True),
         TestCase('tu regardes la television', True),
         TestCase('il regarde la television', True),
         TestCase('nous regardons la television', True),
         TestCase('vous regardez la television', True),
         TestCase('ils regardent la television', True),
+        TestCase('je regardes la television', False),
+
+        # Negation.
         TestCase('tu ne regardes pas la television', True),
+        TestCase('le chat ne mange pas le poisson', True),
+        TestCase('le chat mange ne pas le poisson', False),
+
+        # Definite noun phrases and proper names.
+        TestCase('je regarde la chat', False),
+        TestCase('je regarde Jonathan', True),
+        TestCase('je regarde le Jonathan', False),
+        TestCase('je regarde le Canada', True),
+        TestCase('je regarde Canada', False),
+
+        # Direct object pronouns.
         TestCase('il la regarde', True),
+        TestCase('il regarde la', False),
+
+        # Attributive adjectives.
+        TestCase('je regarde le chat noir', True),
+        TestCase('je regarde le noir chat', False),
+        TestCase('je regarde le beau chat', True),
+        TestCase('je regarde le chat beau', False),
+        TestCase('je regarde la derniere semaine', True),
+        TestCase('je regarde la semaine derniere', True),
+
+        # Additional tests.
         TestCase('Jonathan aime le petit chat', True),
         TestCase('Jonathan aime les chats noirs', True),
         TestCase('je aime le Canada', True),
@@ -506,11 +535,10 @@ if __name__ == '__main__':
         # This is an example of overgeneration.
         TestCase('je vais le Canada', True),
 
-        # Cases to reject.
+        # Cannot have noun phrase as sentences.
         TestCase('le chat', False),
-        TestCase('je mangent le poisson', False),
-        TestCase('les noirs chats mangent le poisson', False),
-        TestCase('la poisson mangent les chats', False),
+
+        # Incomplete sentences.
         TestCase('je mange les', False),
 
         # This is an example of undergeneration.

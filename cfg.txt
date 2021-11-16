@@ -166,9 +166,9 @@ Det-Sg-Fem -> 'la'
 # ---------------------------------------------------------------------
 # ---------------------------- PROPER NOUN ----------------------------
 # ---------------------------------------------------------------------
-PN-Sg-Mas-Det -> 'Canada' ｜ 'Mont Blanc' | 'Danube'
+PN-Sg-Mas-Det -> 'Canada' | 'Mont Blanc' | 'Danube'
 PN-Sg-Fem-Det -> 'Chine' | 'France' | 'Terre'
-PN-Pl-Mas-Det -> 'Etats-Unis' ｜ 'Picasso' | 'Macron' | 'Bourbons'
+PN-Pl-Mas-Det -> 'Etats-Unis' | 'Picasso' | 'Macron' | 'Bourbons'
 PN-Pl-Fem-Det -> 'Pyramides'  | 'Guyanes' | 'Ameriques'
 PN-Sg-Mas-SansDet -> 'Montreal' | 'Jonathan' | 'Quebec'
 PN-Sg-Fem-SansDet -> 'Claire' | 'Trois-Rivieres' | 'Montreal'
