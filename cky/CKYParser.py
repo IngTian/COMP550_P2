@@ -248,7 +248,7 @@ class CKYParser:
         organized_cnf = CKYParser.__organize_grammar(cnf_rules)
         node_reachable_table: Dict[Nonterminal, List[List[Production]]] = dict()
         for starting_point in organized_cnf.keys():
-            CKYParser.__parse_unary_rules(starting_point, node_reachable_table, organized_cnf)
+            CKYParser.__parse_unary_rules(starting_point, node_reachable_table, organized_cnf, set())
 
         def stringify_list_of_nodes(node: Union[Nonterminal, str]) -> str:
             return f"'{node}'" if type(node) == str else str(node)
@@ -325,7 +325,8 @@ class CKYParser:
     def __parse_unary_rules(
             node: Nonterminal,
             node_reachable_table: Dict[Nonterminal, List[List[Production]]],
-            organized_grammar: Dict[Nonterminal, Dict[RuleType, List[Production]]]
+            organized_grammar: Dict[Nonterminal, Dict[RuleType, List[Production]]],
+            visited_nodes: Set[Nonterminal]
     ) -> List[List[Production]]:
         """
         Parse unary rules.
@@ -338,9 +339,26 @@ class CKYParser:
         if node in node_reachable_table.keys():
             return node_reachable_table.get(node)
 
+        if node in visited_nodes:
+            # This is problem.
+            # There must be a unary
+            # ring.
+            return []
+        else:
+            visited_nodes.add(node)
+
         # Concatenate all terminal, binary, and binary-plus productions.
         result: List[List[Production]] = list()
         node_cfg_record = organized_grammar.get(node)
+
+        # This should be a problem.
+        # If node_cfg_record is not defined,
+        # there must be undefined non-terminal
+        # symbols.
+        if not node_cfg_record:
+            node_reachable_table[node] = []
+            return []
+
         for terminal_rule in node_cfg_record.get(RuleType.TERMINAL):
             result.append([terminal_rule])
 
@@ -353,7 +371,7 @@ class CKYParser:
         unary_paths: List[List[Production]] = list()
         for unary_rule in node_cfg_record.get(RuleType.UNARY):
             target_node = unary_rule.rhs()[0]
-            paths = CKYParser.__parse_unary_rules(target_node, node_reachable_table, organized_grammar)
+            paths = CKYParser.__parse_unary_rules(target_node, node_reachable_table, organized_grammar, visited_nodes)
             for path in paths:
                 cloned_path = path.copy()
                 cloned_path.insert(0, unary_rule)

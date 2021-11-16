@@ -70,26 +70,26 @@ if __name__ == '__main__':
     grammar = CFG.fromstring(lines)
     parser = CKYParser(grammar)
     s_accept = [
-        # 'je regarde la television',
-        # 'tu regardes la television',
-        # 'il regarde la television',
-        # 'nous regardons la television',
-        # 'vous regardez la television',
-        # 'ils regardent la television',
-        # 'tu ne regardes pas la television',
-        # 'il la regarde',
-        # 'Jonathan aime le petit chat',
-        # 'Jonathan aime les chats noirs',
-        # 'je aime le Canada',
-        # 'le beau chat le mange',
+        'je regarde la television',
+        'tu regardes la television',
+        'il regarde la television',
+        'nous regardons la television',
+        'vous regardez la television',
+        'ils regardent la television',
+        'tu ne regardes pas la television',
+        'il la regarde',
+        'Jonathan aime le petit chat',
+        'Jonathan aime les chats noirs',
+        'je aime le Canada',
+        'le beau chat le mange',
         'les aides aiment Montreal',
     ]
 
     s_reject = [
-        # 'je mangent le poisson',
-        # 'les noirs chats mangent le poisson',
-        # 'la poisson mangent les chats',
-        # 'je mange les',
+        'je mangent le poisson',
+        'les noirs chats mangent le poisson',
+        'la poisson mangent les chats',
+        'je mange les',
     ]
     print("The following sentences should be accepted")
     parse_sentences(parser, s_accept)
