@@ -124,6 +124,7 @@ class CKYParser:
         :return:
         """
         chain = chain.copy()
+        chain.reverse()
         head_rule = chain.pop()
         head_node: Tree = Tree(head_rule.lhs(), [])
         node = head_node
@@ -506,13 +507,14 @@ if __name__ == '__main__':
         TestCase('je vais le Canada', True),
 
         # Cases to reject.
+        TestCase('le chat', False),
         TestCase('je mangent le poisson', False),
         TestCase('les noirs chats mangent le poisson', False),
         TestCase('la poisson mangent les chats', False),
         TestCase('je mange les', False),
 
         # This is an example of undergeneration.
-        TestCase('je la a mangee', False)
+        TestCase('je la a mangee', False),
     ]
 
     run_tests(test_cases, parser)
