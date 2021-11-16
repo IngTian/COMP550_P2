@@ -502,11 +502,17 @@ if __name__ == '__main__':
         TestCase('le beau chat le mange', True),
         TestCase('les aides aiment Montreal', True),
 
+        # This is an example of overgeneration.
+        TestCase('je vais le Canada', True),
+
         # Cases to reject.
         TestCase('je mangent le poisson', False),
         TestCase('les noirs chats mangent le poisson', False),
         TestCase('la poisson mangent les chats', False),
         TestCase('je mange les', False),
+
+        # This is an example of undergeneration.
+        TestCase('je la a mangee', False)
     ]
 
     run_tests(test_cases, parser)
