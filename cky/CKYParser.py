@@ -431,3 +431,82 @@ class CKYParser:
     @staticmethod
     def __is_binary_plus(rule: Production) -> bool:
         return len(rule.rhs()) >= 2 and not CKYParser.__is_binary(rule)
+
+
+class TestCase:
+    sentence: str
+    accept: bool
+
+    def __init__(self, sentence: str, accept: bool):
+        self.sentence = sentence
+        self.accept = accept
+
+
+def run_tests(tests: List[TestCase], cky_parser: CKYParser) -> None:
+    """
+    A simple tester.
+    :param tests: Tests
+    :param cky_parser: Parser
+    :return: None
+    """
+    print(f'{"-" * 15}RUNNING TESTS{"-" * 15}\n\n\n\n')
+    test_number = 0
+    correct_cases = 0
+    for test_case in tests:
+        test_number += 1
+        print(f'{"+" * 40}\n'
+              f'TEST NUMBER:   {test_number}\n'
+              f'TEST SENTENCE: {test_case.sentence}\n'
+              f'SHOULD ACCEPT: {test_case.accept}\n'
+              f'{"+" * 40}\n')
+        results = cky_parser.parse(test_case.sentence)
+
+        # Rejected
+        if len(results) == 0:
+            print(f'{"~" * 5}THE SENTENCE IS REJECTED{"~" * 5}\n\n\n\n')
+            correct_cases += 1 if not test_case.accept else 0
+        else:
+            print(f'{"~" * 5}THE SENTENCE IS ACCEPTED{"~" * 5}\n')
+            correct_cases += 1 if test_case.accept else 0
+            for result in results:
+                tree = Tree.fromstring(str(result))
+                tree.pretty_print(unicodelines=True, nodedist=4)
+                print(f'RAW TREE: \n{str(tree)}\n')
+            print(f'\n\n\n\n')
+
+    print(f'{"-" * 15}TESTS COMPLETED{"-" * 15}\n'
+          f'RESULTS: {correct_cases}/{len(tests)}')
+
+
+if __name__ == '__main__':
+    print(f'{"-" * 15}CFG DEMO{"-" * 15}\n'
+          f'AUTHOR: ZEYING(ING) TIAN\n'
+          f'DATE:   2021-11-15\n'
+          f'{"-" * 38}\n\n')
+
+    parser = CKYParser(CFG.fromstring(open("../cfg.txt", 'r').read()))
+
+    test_cases = [
+        # Cases to accept.
+        TestCase('je regarde la television', True),
+        TestCase('tu regardes la television', True),
+        TestCase('il regarde la television', True),
+        TestCase('nous regardons la television', True),
+        TestCase('vous regardez la television', True),
+        TestCase('ils regardent la television', True),
+        TestCase('tu ne regardes pas la television', True),
+        TestCase('il la regarde', True),
+        TestCase('Jonathan aime le petit chat', True),
+        TestCase('Jonathan aime les chats noirs', True),
+        TestCase('je aime le Canada', True),
+        TestCase('le beau chat le mange', True),
+        TestCase('les aides aiment Montreal', True),
+
+        # Cases to reject.
+        TestCase('je mangent le poisson', False),
+        TestCase('les noirs chats mangent le poisson', False),
+        TestCase('la poisson mangent les chats', False),
+        TestCase('je mange les', False),
+    ]
+
+    run_tests(test_cases, parser)
