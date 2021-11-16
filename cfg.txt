@@ -166,30 +166,30 @@ Det-Sg-Fem -> 'la'
 # ---------------------------------------------------------------------
 # ---------------------------- PROPER NOUN ----------------------------
 # ---------------------------------------------------------------------
-PN-Sg-Mas-Det -> 'Canada'
-PN-Sg-Fem-Det -> 'Chine' | 'France'
-PN-Pl-Mas-Det -> 'Etats-Unis'
-PN-Pl-Fem-Det -> 'Pyramides'
+PN-Sg-Mas-Det -> 'Canada' ｜ 'Mont Blanc' | 'Danube'
+PN-Sg-Fem-Det -> 'Chine' | 'France' | 'Terre'
+PN-Pl-Mas-Det -> 'Etats-Unis' ｜ 'Picasso' | 'Macron' | 'Bourbons'
+PN-Pl-Fem-Det -> 'Pyramides'  | 'Guyanes' | 'Ameriques'
 PN-Sg-Mas-SansDet -> 'Montreal' | 'Jonathan' | 'Quebec'
 PN-Sg-Fem-SansDet -> 'Claire' | 'Trois-Rivieres' | 'Montreal'
-#PN-Pl-Mas-SansDet -> ''
-#PN-Pl-Fem-SansDet -> ''
+# PN-Pl-Mas-SansDet -> ''
+# PN-Pl-Fem-SansDet -> ''
 
 # ---------------------------------------------------------------------
 # ----------------------------- ADJECTIVE -----------------------------
 # ---------------------------------------------------------------------
-A-Sg-Mas-Post -> 'noir' | 'heureux'
-A-Sg-Fem-Post -> 'noire' | 'heureuse'
-A-Pl-Mas-Post -> 'noirs' | 'heureux'
-A-Pl-Fem-Post -> 'noires' | 'heureuses'
-A-Sg-Mas-Pre -> 'beau' | 'joli' | 'petit' | 'grand'
-A-Sg-Fem-Pre -> 'belle' | 'jolie' | 'petite' | 'grande'
-A-Pl-Mas-Pre -> 'beaux' | 'jolis' | 'petits' | 'grands'
-A-Pl-Fem-Pre -> 'belles' | 'jolies' | 'petites' | 'grandes'
-A-Sg-Mas-PP -> 'dernier'
-A-Sg-Fem-PP -> 'derniere'
-A-Pl-Mas-PP -> 'derniers'
-A-Pl-Fem-PP -> 'dernieres'
+A-Sg-Mas-Post -> 'noir' | 'heureux' | 'gele'
+A-Sg-Fem-Post -> 'noire' | 'heureuse' | 'gelee'
+A-Pl-Mas-Post -> 'noirs' | 'heureux' | 'geles'
+A-Pl-Fem-Post -> 'noires' | 'heureuses' | 'gelees'
+A-Sg-Mas-Pre -> 'beau' | 'joli' | 'petit'
+A-Sg-Fem-Pre -> 'belle' | 'jolie' | 'petite'
+A-Pl-Mas-Pre -> 'beaux' | 'jolis' | 'petits'
+A-Pl-Fem-Pre -> 'belles' | 'jolies' | 'petites'
+A-Sg-Mas-PP -> 'dernier' | 'grand' | 'ancien'
+A-Sg-Fem-PP -> 'derniere' | 'grande' | 'ancienne'
+A-Pl-Mas-PP -> 'derniers' | 'grands' | 'anciens'
+A-Pl-Fem-PP -> 'dernieres' | 'grandes' | 'anciennes'
 
 # ---------------------------------------------------------------------
 # ------------------------------- VERBS -------------------------------
