@@ -21,20 +21,16 @@ S -> PR-3-Pl-Sub VP-3-Pl
 S -> NP-Sg VP-3-Sg
 S -> NP-Pl VP-3-Pl
 
-S -> NP
-
 # ---------------------------------------------------------------------
 # --------------------------- VERB PHRASES ----------------------------
 # ---------------------------------------------------------------------
 VP-1-Sg -> PR-Obj V-1-Sg
 VP-1-Sg -> PR-Obj 'ne' V-1-Sg 'pas'
 VP-1-Sg -> V-1-Sg NP
-VP-1-Sg -> V-1-Sg NP
 VP-1-Sg -> 'ne' V-1-Sg 'pas' NP
 
 VP-1-Pl -> PR-Obj V-1-Pl
 VP-1-Pl -> PR-Obj 'ne' V-1-Pl 'pas'
-VP-1-Pl -> V-1-Pl NP
 VP-1-Pl -> V-1-Pl NP
 VP-1-Pl -> 'ne' V-1-Pl 'pas' NP
 
@@ -99,29 +95,29 @@ NP-Sg -> A-Sg-Fem-Pre PN-Sg-Fem-SansDet
 NP-Sg -> PN-Sg-Fem-SansDet A-Sg-Fem-PP
 NP-Sg -> A-Sg-Fem-PP PN-Sg-Fem-SansDet
 
-NP-Pl -> Det-Pl-Mas N-Pl-Mas
-NP-Pl -> Det-Pl-Mas A-Pl-Mas-Pre N-Pl-Mas
-NP-Pl -> Det-Pl-Mas N-Pl-Mas A-Pl-Mas-Post
-NP-Pl -> Det-Pl-Mas N-Pl-Mas A-Pl-Mas-PP
-NP-Pl -> Det-Pl-Mas A-Pl-Mas-PP N-Pl-Mas
+NP-Pl -> Det-Pl N-Pl-Mas
+NP-Pl -> Det-Pl A-Pl-Mas-Pre N-Pl-Mas
+NP-Pl -> Det-Pl N-Pl-Mas A-Pl-Mas-Post
+NP-Pl -> Det-Pl N-Pl-Mas A-Pl-Mas-PP
+NP-Pl -> Det-Pl A-Pl-Mas-PP N-Pl-Mas
 
-NP-Pl -> Det-Pl-Fem N-Pl-Fem
-NP-Pl -> Det-Pl-Fem A-Pl-Fem-Pre N-Pl-Fem
-NP-Pl -> Det-Pl-Fem N-Pl-Fem A-Pl-Fem-Post
-NP-Pl -> Det-Pl-Fem N-Pl-Fem A-Pl-Fem-PP
-NP-Pl -> Det-Pl-Fem A-Pl-Fem-PP N-Pl-Fem
+NP-Pl -> Det-Pl N-Pl-Fem
+NP-Pl -> Det-Pl A-Pl-Fem-Pre N-Pl-Fem
+NP-Pl -> Det-Pl N-Pl-Fem A-Pl-Fem-Post
+NP-Pl -> Det-Pl N-Pl-Fem A-Pl-Fem-PP
+NP-Pl -> Det-Pl A-Pl-Fem-PP N-Pl-Fem
 
-NP-Pl -> Det-Pl-Mas PN-Pl-Mas-Det
-NP-Pl -> Det-Pl-Mas A-Pl-Mas-Pre PN-Pl-Mas-Det
-NP-Pl -> Det-Pl-Mas PN-Pl-Mas-Det A-Pl-Mas-Post
-NP-Pl -> Det-Pl-Mas PN-Pl-Mas-Det A-Pl-Mas-PP
-NP-Pl -> Det-Pl-Mas A-Pl-Mas-PP PN-Pl-Mas-Det
+NP-Pl -> Det-Pl PN-Pl-Mas-Det
+NP-Pl -> Det-Pl A-Pl-Mas-Pre PN-Pl-Mas-Det
+NP-Pl -> Det-Pl PN-Pl-Mas-Det A-Pl-Mas-Post
+NP-Pl -> Det-Pl PN-Pl-Mas-Det A-Pl-Mas-PP
+NP-Pl -> Det-Pl A-Pl-Mas-PP PN-Pl-Mas-Det
 
-NP-Pl -> Det-Pl-Fem PN-Pl-Fem-Det
-NP-Pl -> Det-Pl-Fem A-Pl-Fem-Pre PN-Pl-Fem-Det
-NP-Pl -> Det-Pl-Fem PN-Pl-Fem-Det A-Pl-Fem-Post
-NP-Pl -> Det-Pl-Fem PN-Pl-Fem-Det A-Pl-Fem-PP
-NP-Pl -> Det-Pl-Fem A-Pl-Fem-PP PN-Pl-Fem-Det
+NP-Pl -> Det-Pl PN-Pl-Fem-Det
+NP-Pl -> Det-Pl A-Pl-Fem-Pre PN-Pl-Fem-Det
+NP-Pl -> Det-Pl PN-Pl-Fem-Det A-Pl-Fem-Post
+NP-Pl -> Det-Pl PN-Pl-Fem-Det A-Pl-Fem-PP
+NP-Pl -> Det-Pl A-Pl-Fem-PP PN-Pl-Fem-Det
 
 NP-Pl -> PN-Pl-Mas-SansDet
 NP-Pl -> PN-Pl-Mas-SansDet A-Pl-Mas-Post
@@ -152,14 +148,13 @@ PR-2-Pl-Obj -> 'vous'
 PR-3-Sg-Obj -> 'le' | 'la'
 PR-3-Pl-Obj -> 'les'
 
-
 # ---------------------------------------------------------------------
 # ------------------------------- NOUN --------------------------------
 # ---------------------------------------------------------------------
-N-Sg-Mas -> 'chats' | 'semaine'
-N-Pl-Mas -> 'télévisions' | 'semaines'
-N-Sg-Fem -> 'chat' | 'poisson'
-N-Pl-Fem -> 'télévision' | 'poissons'
+N-Sg-Mas -> 'chat' | 'poisson' | 'aide'
+N-Pl-Mas -> 'chats' | 'poissons' | 'aides'
+N-Sg-Fem -> 'television' | 'semaine' | 'aide'
+N-Pl-Fem -> 'televisions' | 'semaines' | 'aides'
 
 # ---------------------------------------------------------------------
 # ---------------------------- DETERMINERS ----------------------------
@@ -171,37 +166,37 @@ Det-Sg-Fem -> 'la'
 # ---------------------------------------------------------------------
 # ---------------------------- PROPER NOUN ----------------------------
 # ---------------------------------------------------------------------
-PN-Sg-Mas-Det -> 'Canada'
-PN-Sg-Fem-Det ->
-PN-Pl-Mas-Det ->
-PN-Pl-Fem-Det ->
-PN-Sg-Mas-SansDet -> 'Canada'
-PN-Sg-Fem-SansDet ->
-PN-Pl-Mas-SansDet ->
-PN-Pl-Fem-SansDet ->
+PN-Sg-Mas-Det -> 'Canada' | 'Mont Blanc' | 'Danube'
+PN-Sg-Fem-Det -> 'Chine' | 'France' | 'Terre'
+PN-Pl-Mas-Det -> 'Etats-Unis' | 'Picasso' | 'Macron' | 'Bourbons'
+PN-Pl-Fem-Det -> 'Pyramides'  | 'Guyanes' | 'Ameriques'
+PN-Sg-Mas-SansDet -> 'Montreal' | 'Jonathan' | 'Quebec'
+PN-Sg-Fem-SansDet -> 'Claire' | 'Trois-Rivieres' | 'Montreal'
+# PN-Pl-Mas-SansDet -> ''
+# PN-Pl-Fem-SansDet -> ''
 
 # ---------------------------------------------------------------------
 # ----------------------------- ADJECTIVE -----------------------------
 # ---------------------------------------------------------------------
-A-Sg-Mas-Post -> 'noir' | 'heureux'
-A-Sg-Fem-Post -> 'noire'
-A-Pl-Mas-Post -> 'noirs'
-A-Pl-Fem-Post -> 'noires'
-A-Sg-Mas-Pre -> 'beau' | 'joli'
-A-Sg-Fem-Pre ->
-A-Pl-Mas-Pre ->
-A-Pl-Fem-Pre ->
-A-Sg-Mas-PP ->
-A-Sg-Fem-PP -> 'dernière'
-A-Pl-Mas-PP ->
-A-Pl-Fem-PP ->
+A-Sg-Mas-Post -> 'noir' | 'heureux' | 'gele'
+A-Sg-Fem-Post -> 'noire' | 'heureuse' | 'gelee'
+A-Pl-Mas-Post -> 'noirs' | 'heureux' | 'geles'
+A-Pl-Fem-Post -> 'noires' | 'heureuses' | 'gelees'
+A-Sg-Mas-Pre -> 'beau' | 'joli' | 'petit'
+A-Sg-Fem-Pre -> 'belle' | 'jolie' | 'petite'
+A-Pl-Mas-Pre -> 'beaux' | 'jolis' | 'petits'
+A-Pl-Fem-Pre -> 'belles' | 'jolies' | 'petites'
+A-Sg-Mas-PP -> 'dernier' | 'grand' | 'ancien'
+A-Sg-Fem-PP -> 'derniere' | 'grande' | 'ancienne'
+A-Pl-Mas-PP -> 'derniers' | 'grands' | 'anciens'
+A-Pl-Fem-PP -> 'dernieres' | 'grandes' | 'anciennes'
 
 # ---------------------------------------------------------------------
 # ------------------------------- VERBS -------------------------------
 # ---------------------------------------------------------------------
-V-1-Sg -> 'regarde'
-V-1-Pl -> 'regardons'
-V-2-Sg -> 'regardes'
-V-2-Pl -> 'regardez'
-V-3-Sg -> 'mange' | 'regarde'
-V-3-Pl -> 'regardent'
+V-1-Sg -> 'regarde' | 'mange' | 'aime' | 'veux' | 'vais'
+V-1-Pl -> 'regardons' | 'mangeons' | 'aimons' | 'voulons' | 'allons'
+V-2-Sg -> 'regardes' | 'manges' | 'aimes' | 'veux' | 'vas'
+V-2-Pl -> 'regardez' | 'mangez' | 'aimez' | 'voulez' | 'allez'
+V-3-Sg -> 'regarde' | 'mange' | 'aime' | 'veut' | 'va'
+V-3-Pl -> 'regardent' | 'mangent' | 'aiment' | 'veulent' | 'vont'

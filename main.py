@@ -1,16 +1,50 @@
-# This is a sample Python script.
-
-# Press ⇧F10 to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+from cky.CKYParser import CKYParser
+from nltk import CFG
+from nltk.tree import Tree
+from typing import List
 
 
-# Press the green button in the gutter to run the script.
+def testing_cnf_conversion():
+    g2 = CFG.fromstring("""
+    S -> VP NP
+    VP -> 'eat' NP
+    VP -> V 'noodles' 'with' NP PP PP
+    V -> B
+    B -> C
+    NP -> C E
+    C -> D
+    D -> E
+    B -> E
+    E -> 'e'
+    """)
+    parser = CKYParser(g2)
+    print(parser.cnf_grammar.productions())
+
+    g3 = CFG.fromstring("""
+    A -> C C 'c'
+    C -> 'a'
+    """)
+    parser = CKYParser(g3)
+    print(parser.cnf_grammar.productions())
+
+
+def testing_parse_sentences():
+    g2 = CFG.fromstring("""
+    S -> VP NP
+    VP -> 'eat' NP
+    VP -> V 'noodles' 'with' NP
+    V -> B
+    B -> C
+    NP -> C E
+    C -> D
+    D -> E
+    B -> E
+    E -> 'e'
+    """)
+    parser = CKYParser(g2)
+    parser.parse("e noodles with e e e e")
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    testing_cnf_conversion()
+    testing_parse_sentences()
